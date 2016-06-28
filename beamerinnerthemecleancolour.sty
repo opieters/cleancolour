@@ -1,0 +1,47 @@
+\mode<presentation>
+
+% define title page
+\defbeamertemplate*{title page}{cleancolour}[1][]{
+  \vskip0.3\paperheight% add margin from top
+  \begin{beamercolorbox}[wd=0.9\paperwidth,sep=8pt,#1,center]{title page header}
+    \usebeamerfont{title}\usebeamercolor[fg]{title}\huge\inserttitle%
+  \end{beamercolorbox}%
+  \vskip0.05\paperheight% some space
+  \begin{beamercolorbox}[wd=0.9\paperwidth,#1,center]{subtitle}%
+    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle%
+  \end{beamercolorbox}
+  \vskip0pt plus 1filll % push next box to bottom of slide
+  %box at bottom
+  \begin{columns}%
+    \begin{column}{0.45\paperwidth}%
+      \begin{beamercolorbox}[wd=0.3\paperwidth,#1]{date}%
+        \usebeamerfont{date}\insertdate%
+      \end{beamercolorbox}%
+    \end{column}%
+    \begin{column}{0.45\paperwidth}%
+      \begin{beamercolorbox}[wd=0.45\paperwidth,#1]{author}%
+        \begin{flushright}%
+           \usebeamerfont{author}\insertauthor%
+        \end{flushright}%
+      \end{beamercolorbox}%
+    \end{column}%
+  \end{columns}%
+}
+
+% set appearance
+\setbeamertemplate{items}[square]
+\setbeamertemplate{sections/subsections in toc}[square]
+
+% redefine table of contents
+% define toc entries
+\defbeamertemplate*{section in toc}{cleancolour}[1][]{
+  \colorlet{leftbarcolour}{\pgfkeysvalueof{/cleancolour/colour/\inserttocsectionnumber}}
+  \begin{leftbar}
+    \pgfkeysifdefined{/cleancolour/sec/descr\inserttocsectionnumber}{%
+    \usebeamerfont{tocsection}\inserttocsection \\ \textit{\pgfkeysvalueof{/cleancolour/sec/descr\inserttocsectionnumber}}}%
+    {\usebeamerfont{tocsection}\inserttocsection}%
+  \end{leftbar}
+}
+
+\mode
+<all>

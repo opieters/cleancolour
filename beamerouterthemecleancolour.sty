@@ -1,0 +1,40 @@
+\mode<presentation>
+
+% define frame title
+\defbeamertemplate*{frametitle}{cleancolour}[1][]{
+  \vskip0.05\paperheight%
+  \begin{beamercolorbox}[wd=0.9\paperwidth]{frametitle}
+    \usebeamerfont{frametitle}\insertframetitle
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=0.9\paperwidth]{frametitle}
+    \usebeamerfont{framesubtitle}\insertframesubtitle
+  \end{beamercolorbox}
+}
+
+% define left sidebar canvas
+\setbeamertemplate{sidebar canvas left}{
+% check if toc, and apply corresponding color
+\ifnum\pgfkeysvalueof{/cleancolour/document/toc}=\string 1\relax
+    \pgfkeys{/cleancolour/colour/c = 0}
+\else
+    \pgfkeys{/cleancolour/colour/c=\thesection}
+\fi
+% apply background colour not on title page
+\ifnum\pgfkeysvalueof{/cleancolour/document/title}=\string 0\relax
+\begin{tikzpicture}
+\useasboundingbox (0,0) rectangle(0.5,\the\paperheight);
+\fill[color=\pgfkeysvalueof{/cleancolour/colour/\pgfkeysvalueof{/cleancolour/colour/c}}] (0,0) rectangle (0.5,\the\paperheight);
+\end{tikzpicture}
+\fi
+}
+
+% make sure left sidebar is empty
+\defbeamertemplate*{sidebar left}{cleancolour}[1][]{}
+
+% define beamer margins
+\setbeamersize{text margin left=0.5cm}
+\setbeamersize{sidebar width left=0.5cm}
+\setbeamersize{sidebar width right=0cm}
+\setbeamersize{text margin right=0.5cm}
+
+\mode<all>

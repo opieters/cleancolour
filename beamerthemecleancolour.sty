@@ -1,0 +1,146 @@
+\mode<presentation>
+
+%%%%%%%%%%%%%%%%%%%%%
+% required packages %
+%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{tikz}
+\RequirePackage{pgfkeys}
+\RequirePackage{framed}
+
+%%%%%%%%%%%%%%%%%%
+% theme settings %
+%%%%%%%%%%%%%%%%%%
+\useinnertheme{cleancolour}
+\useoutertheme{cleancolour}
+\usecolortheme{cleancolour}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define global beamer values %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{navigation symbols}{} % remove navigation symbols
+\setbeamertemplate{blocks}[rounded][shadow=false] % define blocks aspects
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define internal storage command %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% define new commands
+\newcommand{\declare}[1]{%
+    \pgfkeys{
+        /cleancolour/#1.is family,
+        /cleancolour/#1.unknown/.style = {\pgfkeyscurrentpath/\pgfkeyscurrentname/.initial = ##1}
+    }%
+}
+
+\declare{colour/}
+\declare{document/}
+\declare{sec/}
+
+% define new table of contents frame
+\pgfkeys{/cleancolour/document/toc = 0}
+\pgfkeys{/cleancolour/document/title = 0}
+
+% set colours by default
+\pgfkeys{/cleancolour/colour/0 = white}
+\pgfkeys{/cleancolour/colour/1 = orange}
+\pgfkeys{/cleancolour/colour/2 = green}
+\pgfkeys{/cleancolour/colour/3 = blue}
+\pgfkeys{/cleancolour/colour/4 = pink}
+\pgfkeys{/cleancolour/colour/5 = black}
+\pgfkeys{/cleancolour/colour/c = 1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define special helper frames %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% define full screen picture command
+\newcommand{\fullScreenPicture}[3][]{{%
+\usebackgroundtemplate{%
+\centering
+\begin{tikzpicture}%
+\useasboundingbox (0,0) rectangle (\the\paperwidth,\the\paperheight);
+\node[at=(current page.center)]{\includegraphics[height=\paperheight]{#3}};%
+\end{tikzpicture}%
+}
+\begin{frame}[plain,#1]%
+\end{frame}}}
+
+%%%%%%%%%%%
+% file io %
+%%%%%%%%%%%
+
+% read descriptions from file
+\makeatletter
+\newread\ccinstream
+\immediate\openin\ccinstream=cleancolour.aux
+\@whilesw\unless\ifeof\ccinstream\fi{%
+\immediate\read\ccinstream to \auxcommand%
+\auxcommand%
+}
+\immediate\closein\ccinstream
+\makeatother
+
+% open output stream and define write commands
+\newwrite\ccoutstream
+\immediate\openout\ccoutstream=cleancolour.aux
+\newcommand{\writedescription}[2]{%
+\ifx\\#2\\
+\relax % do nothing
+\else
+\immediate\write\ccoutstream{\noexpand\pgfkeys{/cleancolour/sec/descr#1 = #2}}%
+\fi
+}
+
+% close output stream at end of document
+\AtEndDocument{\immediate\closeout\ccoutstream}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% redefine default latex commands %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% redefine section commandcleancolour
+\let\oldsection\section
+\renewcommand{\section}[2][]{%
+\oldsection{#2}%
+\ifx\\#1\\
+\relax
+\else
+\pgfkeys{/cleancolour/sec/descr\thesection= #1 }%
+	\writedescription{\thesection}{#1}%
+	\fi
+}
+
+\newcommand{\tocframe}[1][plain]{{\pgfkeys{/cleancolour/document/toc = 1}%
+\begin{frame}[#1]\tableofcontents\end{frame}%
+\pgfkeys{/cleancolour/document/toc = 0}}}
+
+\newcommand{\titleframe}[1][plain]{{
+\hoffset=-0.25cm % for centering
+\pgfkeys{/cleancolour/document/title = 1}%
+\begin{frame}[#1]\titlepage\end{frame}%
+\pgfkeys{/cleancolour/document/title = 0}}}
+
+\newcommand*{\leftbarcolourcmd}{\color{leftbarcolour}}
+\colorlet{leftbarcolour}{black}
+
+\renewenvironment{leftbar}[1][\hsize]
+{%
+\def\FrameCommand
+{%
+{\leftbarcolourcmd{\vrule width 3pt}}%
+\hspace{0pt}%must no space.
+\fboxsep=\FrameSep\colorbox{white}%
+}%
+\MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+}
+{\endMakeFramed}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define functions for external reconfiguration %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\providecommand\ccsetcolour[2]{%
+    \pgfkeys{/cleancolour/colour/#1} = #2%
+}
+
+\mode<all>
