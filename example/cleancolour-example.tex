@@ -2,12 +2,20 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{babel}
-\title{A Title}
+\title{cleancolour}
 \date{\today}
-\author[Surname]{Author}
-\subtitle{A Subtitle}
+\author[Pieters]{Olivier}
+\subtitle{An alternative Beamer theme}
 \usepackage{enumitem}
-\usepackage{anyfontsize}
+\usepackage{listings}
+
+\lstset{basicstyle=\footnotesize\ttfamily, % font style and size
+  breakatwhitespace=false,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt
+}
 
 \usetheme{cleancolour}
 
@@ -22,42 +30,49 @@
 
 \tocframe
 
-\section[Small description]{Section 1}
+\section[Absolute Theme Basics]{Basics}
 
-\begin{frame} 
-\frametitle{Section 1} 
-\begin{citemize}
-\item Title of slide 1
-\item Title of slide 2
-\item Title of slide 3
-\end{citemize}
+\begin{frame}
+  \frametitle{Section-based sidebar colouring!}
+  \begin{citemize}
+    \item Each section has a unique left sidebar colour!
+    \item By default up to five beautiful side colours
+    \item Minmal Beamer slides that don't scream \emph{beamer}
+  \end{citemize}
 \end{frame}
 
-\begin{frame} 
-\frametitle{Title of slide 1 } 
-Some text and illustrations to support this portion of the talk. Notice the nice colour on the side!
+\begin{frame}
+  \frametitle{Section-based sidebar colouring!}
+  New \lstinline|\\section| command that takes an optional argument: a subtitles for the section for clarification.
+
+  Example usage: \lstinline|\\section\[Wearable PCB design\]\{Hardware\}|
+\end{frame}
+
+\begin{frame}
+\frametitle{Redesigned tableofcontents (toc) frame}
+The table of contents frame has been redesigned to showcase different section colours and subtitles! These subtitles will only be displayed when relevant to the content, to maximise impact.
 \end{frame}
 
 \tocframe
 
-\section[Another small description]{Section 2}
+\section[Useful helpers for common problems]{Special Frames}
 
-\begin{frame}{LEDs, buttons and speaker provide user interface}
+\begin{frame}{Full screen image frame}
 \centering
-\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/PCB.jpg}
+Often a full screen image is
 \end{frame}
 
 \tocframe
 
 \begin{frame}{Measurements}
 \centering
-\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/dist1.png}
+%\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/dist1.png}
 \end{frame}
 
 \tocframe
 
 \begin{frame}{Conclusion}
-A well constructed conclusion to wrap up the presentation. Possibly refer back to the introduction (to close the circle). 
+A well constructed conclusion to wrap up the presentation. Possibly refer back to the introduction (to close the circle).
 \end{frame}
 
 \fullScreenPicture{height=\paperheight}{figures/full-screen.jpg}
